@@ -2,29 +2,27 @@ import sympy as sp
 import math as math
 
 """
-2/6/2023
+3/6/2023
 Newton Raphson's method, to approximate a function
-Kahyberth Stiven Gonzalez Sayas: 2060121-3743
+Kahyberth Stiven Gonzalez Sayas
 """
 # fx = function, xi = starting point, apx = approximation with exact figures
-def newtonRaphson(fx,xi, apx = None):
+def newtonRaphson(fx, xi, apx=0):
     x = sp.Symbol('x')
-    fx = sp.sympify(fx)
-    dx = sp.diff(fx,x)
-    x1 = xi + 1
-    x1_n = [1]
+    dx = sp.diff(fx, x)
+    fx_exp = sp.sympify(fx)
+    x_n = [1]
     c = 0
-    while (True):
-        c+=1
-        x1 = x1 - (math.fabs(fx.subs(x,x1))/math.fabs(dx.subs(x,x1)))
-        if ( x1 == x1_n[-1] or c == apx ):
-            print(x1) # Final root value
+    while True:
+        if xi == x_n[-1] or (apx > 0 and c == apx):
             break
-        x1_n.append(x1) # 1.5, 1.34782, 1.32520, 1.324718, 1324746
-    return x1_n; #History of all drifts
+        x_n.append(xi)
+        xi = xi - (fx_exp.subs(x, xi) / dx.subs(x, xi))
+        c += 1
+    return xi
+dato = newtonRaphson('exp(x)-2+x**2', 0.5, 3)
 
-#TEST
-dato = newtonRaphson('x**3-x-1',1)
-for i in range(1, len(dato)):
-    print("History of all drifts: ", dato[i])
-
+#Testing
+#f(x) = ln(x)-2, The root is between 7 and 8, xi = 8, apx = 2, result = 7.389015142227567
+#f(x) = 'exp(x)-2+x**2', xi = 0.5, apx = 3, result = 0.537274449174110
+print(dato)
